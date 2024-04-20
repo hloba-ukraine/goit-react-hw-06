@@ -1,47 +1,43 @@
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import ContactList from "./ContactList/ContactList";
 import SearchBox from "./SearchBox/SearchBox";
 import ContactForm from "./ContactForm/ContactForm";
 import { nanoid } from "nanoid";
-const initialContact = [
-  { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
-  { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
-  { id: "id-3", name: "Eden Clements", number: "645-17-79" },
-  { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
-];
+import { useSelector, useDispatch } from "react-redux";
+import { addContact, deleteContact } from "../redux/contactsSlice.js";
+import { changeFilter } from "../redux/filtersSlice.js";
+
 export default function App() {
-  const [contacts, setContacts] = useState(() => {
-    const stringifiedContacts = localStorage.getItem("contacts");
-    const parsedContacts = JSON.parse(stringifiedContacts) ?? initialContact;
-    return parsedContacts;
-  });
-  useEffect(() => {
-    localStorage.setItem("contacts", JSON.stringify(contacts));
-  }, [contacts]);
+  const dispatch = useDispatch();
+  const selectContacts = useSelector((state) => state.contacts.items);
+  const selectNameFilter = useSelector((state) => state.filters.name);
+
   const OnDeleteContact = (event) => {
-    setContacts((prevContacts) =>
-      prevContacts.filter((contact) => contact.id !== event)
-    );
+    const actions = deleteContact(event);
+    dispatch(actions);
   };
-  const [filter, setFilter] = useState("");
-  const onChangeFilter = (event) => {
-    setFilter(event.target.value);
-  };
-  const filterContacts = contacts.filter((contact) =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
-  );
   const onAddContact = (formData) => {
     const finalContact = {
       ...formData,
       id: nanoid(),
     };
-    setContacts((prevContacts) => [...prevContacts, finalContact]);
+    const actions = addContact(finalContact);
+    dispatch(actions);
   };
+
+  const onChangeFilter = (event) => {
+    const actions = changeFilter(event.target.value);
+    dispatch(actions);
+  };
+  const filterContacts = selectContacts.filter((contact) =>
+    contact.name.toLowerCase().includes(selectNameFilter.toLowerCase())
+  );
+
   return (
     <div>
       <h1>Phonebook</h1>
       <ContactForm onAddContact={onAddContact} />
-      <SearchBox value={filter} onChangeFilter={onChangeFilter} />
+      <SearchBox value={selectNameFilter} onChangeFilter={onChangeFilter} />
       <ContactList
         contacts={filterContacts}
         OnDeleteContact={OnDeleteContact}
