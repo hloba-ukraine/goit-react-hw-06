@@ -10,10 +10,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { refreshUser } from "../redux/auth/operations";
 import RestrictedRoute from "./RestrictedRoute/RestrictedRoute";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
-import { selectIsLoading } from "../redux/auth/selectors";
+import { selectIsLoading, selectIsError } from "../redux/auth/selectors";
+import ErrorMessage from "./ErrorMessage/ErrorMessage";
 
 export default function App() {
   const isLoading = useSelector(selectIsLoading);
+  const isError = useSelector(selectIsError);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(refreshUser());
@@ -56,6 +58,7 @@ export default function App() {
           </Suspense>
         </Layout>
       )}
+      {isError && <ErrorMessage />}
     </div>
   );
 }
