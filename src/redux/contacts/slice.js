@@ -5,11 +5,24 @@ const INITAL_STATE = {
   items: [],
   loading: false,
   error: null,
+  isModalOpen: false,
+  deleteId: "",
 };
 const contactsSlice = createSlice({
   name: "contacts",
 
   initialState: INITAL_STATE,
+  reducers: {
+    isModalOpen(state) {
+      state.isModalOpen = true;
+    },
+    isModalClose(state) {
+      state.isModalOpen = false;
+    },
+    deleteId(state, action) {
+      state.deleteId = action.payload;
+    },
+  },
   extraReducers: (builder) =>
     builder
       .addCase(fetchContacts.pending, (state) => {
@@ -50,5 +63,5 @@ const contactsSlice = createSlice({
       })
       .addCase(deleteContact.rejected),
 });
-
+export const { isModalOpen, isModalClose, deleteId } = contactsSlice.actions;
 export const contactsReducer = contactsSlice.reducer;

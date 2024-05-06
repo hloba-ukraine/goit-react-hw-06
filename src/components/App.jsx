@@ -3,7 +3,7 @@ import { Suspense, useEffect } from "react";
 import HomePage from "../pages/HomePage";
 import RegistrationPage from "../pages/RegistrationPage";
 import LoginPage from "../pages/LoginPage";
-import ContactsPage from "../pages/ContactsPage";
+import ContactsPage from "../pages/ContactsPage/ContactsPage";
 import Layout from "./ Layout/ Layout";
 import Loader from "./Loader/Loader";
 import { useDispatch, useSelector } from "react-redux";

@@ -14,7 +14,7 @@ export default function AppBar() {
   return (
     <header>
       <nav className={css.nav}>
-        <Navigation />
+        <Navigation style={addActiveClass} />
         {isSignedIn ? (
           <UserMenu style={addActiveClass} />
         ) : (
